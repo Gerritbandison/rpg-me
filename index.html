@@ -5,127 +5,198 @@
   <base href="/">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="Description" content="Demonstration for rpg-me">
+  <meta name="description" content="Create and customize your RPG character with ease!">
+
+  <link rel="stylesheet" href="./styles/variables.css" />
 
   <style>
-    :root, html, body {
+    :root,
+    html,
+    body {
       margin: 0;
       padding: 0;
+      font-family: 'Arial', sans-serif;
     }
-    #demo {
-      margin: var(--ddd-spacing-2);
+
+    body {
+      background-color: #f4f4f9;
+      color: #333;
     }
-    rpg-me {
-      margin: var(--ddd-spacing-2);
-      border: var(--ddd-border-md);
-      border-radius: var(--ddd-radius-lg);
+
+    h1, h2 {
+      text-align: center;
+      color: #2c3e50;
     }
-    rpg-me:hover {
-      box-shadow: var(--ddd-boxShadow-sm);
+
+    h1 {
+      margin: 20px 0;
     }
-    #example {
-      --rpg-me-font-size: var(--ddd-font-size-l);
-      background-color: var(--ddd-accent-2);
-      color: var(--ddd-primary-17);
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    #container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      padding: 20px;
+    }
+
+    @media (min-width: 768px) {
+      #container {
+        flex-direction: row;
+      }
+    }
+
+    .column {
+      flex: 1;
+      padding: 20px;
+      background: #ffffff;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    .form-input {
+      margin-bottom: 20px;
+    }
+
+    .form-input label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #2c3e50;
+    }
+
+    .form-input wired-input {
+      width: 100%;
+    }
+
+    wired-button {
+      background: #2c3e50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    wired-button:hover {
+      background: #34495e;
+    }
+
+    .output {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .output wired-input {
+      flex-grow: 1;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    .output wired-button {
+      background: #27ae60;
+      color: #fff;
+    }
+
+    .output wired-button:hover {
+      background: #2ecc71;
+    }
+
+    #character-preview {
+      text-align: center;
+    }
+
+    #character-preview rpg-character {
+      margin: 0 auto;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 180px;
+      background-color: #2c3e50;
+      color: #fff;
+      text-align: center;
+      border-radius: 5px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%; 
+      left: 50%;
+      margin-left: -90px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
     }
   </style>
-  <title>rpg-me</title>
+  <title>RPG Character Customizer</title>
 </head>
 
 <body>
   <div id="demo">
-    <h1>rpg-me</h1>
-    <!-- this is going to do whatever the tag's defaults are -->
-    <h2>Default</h2>
-    <rpg-me></rpg-me>
-    <h2>Slot usage</h2>
-    <rpg-me data-accent="2" data-primary="17"><div>Sample slot content</div></rpg-me>
-    <h2>Property usage</h2>
-    <rpg-me id="example" title="Sample property title"></rpg-me>
-  </div>
-  <script type="module" src="./rpg-me.js"></script>
+    <h1>RPG Character Customizer</h1>
+    <div id="container">
+      <!-- Left column: Character -->
+      <div class="column" id="character-preview">
+        <h2>Your Character</h2>
+        <rpg-character id="character" seed="1234567890" style="height: 300px; width: 300px;"></rpg-character>
+        <p></p>
+      </div>
 
-  <!-- Take HAX, the Web and you further down the rabbit hole -->
-  <style>
-    #follow-the-white-rabbit {
-      margin: var(--ddd-spacing-4) auto 64px  16px;
-      background-color: var(--ddd-accent-4);
-      color: black;
-    }
-    #follow-the-white-rabbit[open] summary {
-      background-color: var(--ddd-accent-4) !important;
-      color: black;
-    }
-    #follow-the-white-rabbit[open] .content {
-      padding: 0 var(--ddd-spacing-4);
-    }
-    #follow-the-white-rabbit ul,
-    #follow-the-white-rabbit li {
-      padding: 0;
-      margin: 0;
-    }
-    #follow-the-white-rabbit li {
-      font-size: var(--ddd-font-size-xs);
-      list-style: none;
-    }
-    #follow-the-white-rabbit li strong,
-    #follow-the-white-rabbit li a {
-      padding: var(--ddd-spacing-2) var(--ddd-spacing-4);
-      color: black;
-      display: block;
-      font-weight: bold;
-    }
-    #follow-the-white-rabbit li:focus-within a,
-    #follow-the-white-rabbit li:hover a {
-      background-color: black;
-      color: yellow;
-    }
-  </style>
-  <details id="follow-the-white-rabbit" open>
-    <summary>How to Develop</summary>
-    <div class="content">
-      <p>
-      
-        <strong>Checkout project on github:</strong> <a href="https://github.com/Gerritbandison/rpg-me" target="_blank" rel="nofollow">Gerritbandison/rpg-me</a>
-        
-      </p>
-      <p>
-        You can edit the current page by modifying <code>index.html</code><br />
-        To edit your <strong>rpg-me</strong> tag, modify <code>src/rpg-me.js</code>.
-        This file contains all the HTML, CSS and JavaScript used to render your elements above!
-      </p>
-      <p>
-        Web components are easy to follow once you get used to their pattern.
-        Below are links to help on your journey. Good luck, we need you!
-      </p>
-      <ul>
-        <li><a href="https://haxtheweb.org/documentation/ddd" target="_blank">🧑‍🎨 Learn DDD HAX Design system</a></li>
-        <li><a href="https://lit.dev/playground/" target="_blank" rel="nofollow">🔥 Learn Lit</a></li>
-        <li><a href="https://hax.psu.edu" target="_blank">🧙 HAX The Web @ Penn State</a></li>
-      </ul>
-      <h2>Join and Share HAX</h2>
-      <ul>
-        <li><a href="https://github.com/haxtheweb/issues/issues" target="_blank" rel="nofollow">🔮 Ideas to HAX Harder, Better, Faster, Stronger</a></li>
-        <li><a href="https://bit.ly/hax-the-linkedin" target="_blank" rel="nofollow">👔 Share on LinkedIn</a></li>
-        <li><a href="https://bit.ly/hax-the-x" target="_blank" rel="nofollow">🧵 Tweet on X</a></li>
-        <li><a href="https://bit.ly/hax-discord" target="_blank" rel="nofollow">💬 Join Community</a></li>
-      </ul>
-      <h2>Learn the languages and tools</h2>
-      <ul>
-        <li><a href="https://w3schools.com" target="_blank" rel="nofollow">🌐 Learn HTML</a></li>
-        <li><a href="https://web.dev/learn/css/" target="_blank" rel="nofollow">🎨 Learn CSS</a></li>
-        <li><a href="http://Javascript.info" target="_blank" rel="nofollow">💻 Learn JavaScript (JS)</a></li>
-        <li><a href="https://gitimmersion.com" target="_blank" rel="nofollow">🦺 Learn Git / Github</a></li>
-        <li><a href="https://nodesource.com/blog/an-absolute-beginners-guide-to-using-npm/" target="_blank" rel="nofollow">📦 Learn NPM</a></li>
-        <li><a href="http://learnux.io" target="_blank" rel="nofollow">📐 Learn UX / UI development</a></li>
-      </ul>
-      <h2>Find purpose and inspiration</h2>
-      <ul>
-        <li><a href="https://www.youtube.com/watch?v=eC7xzavzEKY" target="_blank" rel="nofollow">🐟 This is Water - David Foster Wallace</a></li>
-        <li><a href="https://www.youtube.com/watch?v=kYfNvmF0Bqw" target="_blank" rel="nofollow">🏗️ Secrets of Life - Steve Jobs</a></li>
-        <li><strong>💡 <em>Never. Stop. Innovating.</em></strong></li>
-      </ul>
+      <!-- Right column: Inputs -->
+      <div class="column">
+        <form id="character-form">
+          <div class="form-input">
+            <label for="seed">Seed <span class="tooltip">ℹ
+              <span class="tooltiptext">Enter a numeric seed to generate a unique character.</span>
+            </span></label>
+            <wired-input id="seed" name="seed" placeholder="Enter Seed"></wired-input>
+          </div>
+          <div class="form-input">
+            <label for="accessories">Accessories (0-9)</label>
+            <wired-input id="accessories" name="accessories" placeholder="Enter Accessories"></wired-input>
+          </div>
+          <div class="form-input">
+            <label for="base">Base (0-9)</label>
+            <wired-input id="base" name="base" placeholder="Enter Base"></wired-input>
+          </div>
+          <div class="form-input">
+            <label for="hat">Hat (e.g., cowboy, ninja)</label>
+            <wired-input id="hat" name="hat" placeholder="Enter Hat"></wired-input>
+          </div>
+          <div class="form-input">
+            <label for="fire">On Fire (true/false)</label>
+            <wired-input id="fire" name="fire" placeholder="Enter true or false"></wired-input>
+          </div>
+          <wired-button id="share-btn">Generate Share Link</wired-button>
+        </form>
+        <div class="output">
+          <wired-input id="share-link" placeholder="Shareable Link" readonly></wired-input>
+          <wired-button id="copy-btn">Copy</wired-button>
+        </div>
+      </div>
     </div>
-  </details>
+  </div>
+
+  <script type="module">
+    import "wired-elements";
+    import "@haxtheweb/rpg-character";
+    import "./rpg-me.js";
+  </script>
 </body>
+
 </html>

@@ -1,84 +1,94 @@
-/**
- * Copyright 2024 Gerritbandison
- * @license Apache-2.0, see LICENSE for full text.
- */
-import { LitElement, html, css } from "lit";
-import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
-import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
-
-/**
- * `rpg-me`
- * 
- * @demo index.html
- * @element rpg-me
- */
-export class RpgMe extends DDDSuper(I18NMixin(LitElement)) {
-
-  static get tag() {
-    return "rpg-me";
-  }
-
+export class RpgMeApp {
   constructor() {
-    super();
-    this.title = "";
-    this.t = this.t || {};
-    this.t = {
-      ...this.t,
-      title: "Title",
-    };
-    this.registerLocalization({
-      context: this,
-      localesPath:
-        new URL("./locales/rpg-me.ar.json", import.meta.url).href +
-        "/../",
-      locales: ["ar", "es", "hi", "zh"],
-    });
+    this.init();
   }
 
-  // Lit reactive properties
-  static get properties() {
-    return {
-      ...super.properties,
-      title: { type: String },
-    };
+  init() {
+    // Elements
+    this.character = document.getElementById("character");
+    this.seedInput = document.getElementById("seed");
+    this.accessoriesInput = document.getElementById("accessories");
+    this.baseInput = document.getElementById("base");
+    this.hatInput = document.getElementById("hat");
+    this.fireInput = document.getElementById("fire");
+    this.shareBtn = document.getElementById("share-btn");
+    this.copyBtn = document.getElementById("copy-btn");
+    this.shareLink = document.getElementById("share-link");
+
+    // Event Listeners
+    [this.seedInput, this.accessoriesInput, this.baseInput, this.hatInput, this.fireInput].forEach((input) =>
+      input.addEventListener("input", () => this.updateCharacter())
+    );
+    this.shareBtn.addEventListener("click", () => this.generateShareLink());
+    this.copyBtn.addEventListener("click", () => this.copyToClipboard());
+
+    // Initialize state from URL if available
+    this.loadFromURL();
   }
 
-  // Lit scoped styles
-  static get styles() {
-    return [super.styles,
-    css`
-      :host {
-        display: block;
-        color: var(--ddd-theme-primary);
-        background-color: var(--ddd-theme-accent);
-        font-family: var(--ddd-font-navigation);
-      }
-      .wrapper {
-        margin: var(--ddd-spacing-2);
-        padding: var(--ddd-spacing-4);
-      }
-      h3 span {
-        font-size: var(--rpg-me-label-font-size, var(--ddd-font-size-s));
-      }
-    `];
+  updateCharacter() {
+    // Update character properties dynamically
+    this.character.seed = this.seedInput.value || "1234567890";
+    this.character.accessories = this.accessoriesInput.value || "0";
+    this.character.base = this.baseInput.value || "0";
+    this.character.hat = this.hatInput.value || "none";
+    this.character.fire = this.fireInput.value === "true";
+
+    // Update URL state
+    this.updateURL();
   }
 
-  // Lit render the HTML
-  render() {
-    return html`
-<div class="wrapper">
-  <h3><span>${this.t.title}:</span> ${this.title}</h3>
-  <slot></slot>
-</div>`;
+  generateShareLink() {
+    const params = new URLSearchParams();
+    params.set("seed", this.seedInput.value || "1234567890");
+    params.set("accessories", this.accessoriesInput.value || "0");
+    params.set("base", this.baseInput.value || "0");
+    params.set("hat", this.hatInput.value || "none");
+    params.set("fire", this.fireInput.value === "true");
+
+    const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+    this.shareLink.value = url;
+    window.history.replaceState(null, "", url);
   }
 
-  /**
-   * haxProperties integration via file reference
-   */
-  static get haxProperties() {
-    return new URL(`./lib/${this.tag}.haxProperties.json`, import.meta.url)
-      .href;
+  copyToClipboard() {
+    const link = this.shareLink.value;
+
+    if (link) {
+      navigator.clipboard.writeText(link).then(() => {
+        alert("Link copied to clipboard!");
+      }).catch((err) => {
+        console.error("Failed to copy text: ", err);
+      });
+    } else {
+      alert("No link to copy! Generate a share link first.");
+    }
+  }
+
+  loadFromURL() {
+    const params = new URLSearchParams(window.location.search);
+
+    this.seedInput.value = params.get("seed") || "1234567890";
+    this.accessoriesInput.value = params.get("accessories") || "0";
+    this.baseInput.value = params.get("base") || "0";
+    this.hatInput.value = params.get("hat") || "none";
+    this.fireInput.value = params.get("fire") === "true";
+
+    this.updateCharacter();
+  }
+
+  updateURL() {
+    const params = new URLSearchParams();
+    params.set("seed", this.seedInput.value || "1234567890");
+    params.set("accessories", this.accessoriesInput.value || "0");
+    params.set("base", this.baseInput.value || "0");
+    params.set("hat", this.hatInput.value || "none");
+    params.set("fire", this.fireInput.value === "true");
+
+    const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState(null, "", url);
   }
 }
 
-globalThis.customElements.define(RpgMe.tag, RpgMe);
+// Initialize the app
+document.addEventListener("DOMContentLoaded", () => new RpgMeApp());
