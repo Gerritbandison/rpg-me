@@ -6,20 +6,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description" content="Create and customize your RPG character with ease!">
-
   <link rel="stylesheet" href="./styles/variables.css" />
 
   <style>
-    :root,
-    html,
-    body {
+    :root, html, body {
       margin: 0;
       padding: 0;
       font-family: 'Arial', sans-serif;
     }
 
     body {
-      background-color: #f4f4f9;
+      background-color: #131314;
       color: #333;
     }
 
@@ -68,14 +65,13 @@
       color: #2c3e50;
     }
 
-    .form-input wired-input {
+    wired-input {
       width: 100%;
     }
 
     wired-button {
       background: #2c3e50;
       color: #fff;
-      border: none;
       padding: 10px 20px;
       font-size: 16px;
       border-radius: 5px;
@@ -143,6 +139,7 @@
       opacity: 1;
     }
   </style>
+
   <title>RPG Character Customizer</title>
 </head>
 
@@ -154,7 +151,6 @@
       <div class="column" id="character-preview">
         <h2>Your Character</h2>
         <rpg-character id="character" seed="1234567890" style="height: 300px; width: 300px;"></rpg-character>
-        <p></p>
       </div>
 
       <!-- Right column: Inputs -->
@@ -166,24 +162,55 @@
             </span></label>
             <wired-input id="seed" name="seed" placeholder="Enter Seed"></wired-input>
           </div>
+
+          <div class="form-input">
+            <label for="face">Face (0-5)</label>
+            <wired-input id="face" type="number" min="0" max="5" step="1" placeholder="Enter a number (0-5)"></wired-input>
+          </div>
+
           <div class="form-input">
             <label for="accessories">Accessories (0-9)</label>
-            <wired-input id="accessories" name="accessories" placeholder="Enter Accessories"></wired-input>
+            <wired-input id="accessories" type="number" min="0" max="9" step="1" placeholder="Enter a number (0-9)"></wired-input>
           </div>
+
           <div class="form-input">
-            <label for="base">Base (0-9)</label>
-            <wired-input id="base" name="base" placeholder="Enter Base"></wired-input>
+            <label for="faceitem">Face Item (0-9)</label>
+            <wired-input id="faceitem" type="number" min="0" max="9" step="1" placeholder="Enter a number (0-9)"></wired-input>
           </div>
+
           <div class="form-input">
-            <label for="hat">Hat (e.g., cowboy, ninja)</label>
-            <wired-input id="hat" name="hat" placeholder="Enter Hat"></wired-input>
+            <label for="hair">Hair (0-9)</label>
+            <wired-input id="hair" type="number" min="0" max="9" step="1" placeholder="Enter a number (0-9)"></wired-input>
           </div>
+
           <div class="form-input">
-            <label for="fire">On Fire (true/false)</label>
-            <wired-input id="fire" name="fire" placeholder="Enter true or false"></wired-input>
+            <label for="pants">Pants (0-9)</label>
+            <wired-input id="pants" type="number" min="0" max="9" step="1" placeholder="Enter a number (0-9)"></wired-input>
           </div>
+
+          <div class="form-input">
+            <label for="shirt">Shirt (0-9)</label>
+            <wired-input id="shirt" type="number" min="0" max="9" step="1" placeholder="Enter a number (0-9)"></wired-input>
+          </div>
+
+          <div class="form-input">
+            <label for="hat">Hat (e.g., none, bunny, coffee, etc.)</label>
+            <wired-input id="hat" type="text" placeholder="Enter a hat (e.g., none, bunny, coffee)"></wired-input>
+          </div>
+
+          <div class="form-input">
+            <label for="hatcolor">Hat Color (0-9)</label>
+            <wired-input id="hatcolor" type="number" min="0" max="9" step="1" placeholder="Enter a number (0-9)"></wired-input>
+          </div>
+
+          <div class="form-input">
+            <input type="checkbox" id="fire" name="characterState" value="fire">
+            <label for="fire">Fire</label>
+          </div>
+
           <wired-button id="share-btn">Generate Share Link</wired-button>
         </form>
+
         <div class="output">
           <wired-input id="share-link" placeholder="Shareable Link" readonly></wired-input>
           <wired-button id="copy-btn">Copy</wired-button>

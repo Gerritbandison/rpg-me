@@ -4,47 +4,95 @@ export class RpgMeApp {
   }
 
   init() {
-    // Elements
+    // Initialize elements
     this.character = document.getElementById("character");
     this.seedInput = document.getElementById("seed");
     this.accessoriesInput = document.getElementById("accessories");
-    this.baseInput = document.getElementById("base");
+    this.faceInput = document.getElementById("face");
+    this.faceitemInput = document.getElementById("faceitem");
+    this.hairInput = document.getElementById("hair");
+    this.pantsInput = document.getElementById("pants");
+    this.shirtInput = document.getElementById("shirt");
+    this.skinInput = document.getElementById("skin");
+    this.hatcolorInput = document.getElementById("hatcolor");
     this.hatInput = document.getElementById("hat");
     this.fireInput = document.getElementById("fire");
     this.shareBtn = document.getElementById("share-btn");
     this.copyBtn = document.getElementById("copy-btn");
     this.shareLink = document.getElementById("share-link");
 
-    // Event Listeners
-    [this.seedInput, this.accessoriesInput, this.baseInput, this.hatInput, this.fireInput].forEach((input) =>
-      input.addEventListener("input", () => this.updateCharacter())
-    );
-    this.shareBtn.addEventListener("click", () => this.generateShareLink());
-    this.copyBtn.addEventListener("click", () => this.copyToClipboard());
+    // Attach event listeners for inputs
+    const inputs = [
+      this.seedInput,
+      this.accessoriesInput,
+      this.faceInput,
+      this.faceitemInput,
+      this.hairInput,
+      this.pantsInput,
+      this.shirtInput,
+      this.skinInput,
+      this.hatcolorInput,
+      this.hatInput,
+    ];
+    inputs.forEach((input) => input?.addEventListener("input", () => this.updateCharacter()));
 
-    // Initialize state from URL if available
+    this.fireInput?.addEventListener("change", () => this.updateCharacter());
+    this.shareBtn?.addEventListener("click", () => this.generateShareLink());
+    this.copyBtn?.addEventListener("click", () => this.copyToClipboard());
+
+    // Load state from URL if available
     this.loadFromURL();
   }
 
   updateCharacter() {
-    // Update character properties dynamically
-    this.character.seed = this.seedInput.value || "1234567890";
-    this.character.accessories = this.accessoriesInput.value || "0";
-    this.character.base = this.baseInput.value || "0";
-    this.character.hat = this.hatInput.value || "none";
-    this.character.fire = this.fireInput.value === "true";
+    const validHats = [
+      "none",
+      "bunny",
+      "coffee",
+      "construction",
+      "cowboy",
+      "education",
+      "knight",
+      "ninja",
+      "party",
+      "pirate",
+      "watermelon",
+    ];
+
+    // Update character properties
+    this.character.seed = this.seedInput?.value || "1234567890";
+    this.character.accessories = this.accessoriesInput?.value || "0";
+    this.character.face = this.faceInput?.value || "0";
+    this.character.faceitem = this.faceitemInput?.value || "0";
+    this.character.hair = this.hairInput?.value || "0";
+    this.character.pants = this.pantsInput?.value || "0";
+    this.character.shirt = this.shirtInput?.value || "0";
+    this.character.skin = this.skinInput?.value || "0";
+    this.character.hatcolor = this.hatcolorInput?.value || "0";
+
+    // Validate and update hat
+    const enteredHat = this.hatInput?.value.toLowerCase();
+    this.character.hat = validHats.includes(enteredHat) ? enteredHat : "none";
+    this.character.fire = this.fireInput?.checked || false;
 
     // Update URL state
     this.updateURL();
   }
 
   generateShareLink() {
-    const params = new URLSearchParams();
-    params.set("seed", this.seedInput.value || "1234567890");
-    params.set("accessories", this.accessoriesInput.value || "0");
-    params.set("base", this.baseInput.value || "0");
-    params.set("hat", this.hatInput.value || "none");
-    params.set("fire", this.fireInput.value === "true");
+    const params = new URLSearchParams({
+      seed: this.character.seed,
+      accessories: this.character.accessories,
+      face: this.character.face,
+      faceitem: this.character.faceitem,
+      hair: this.character.hair,
+      pants: this.character.pants,
+      shirt: this.character.shirt,
+      skin: this.character.skin,
+      hatcolor: this.character.hatcolor,
+      hat: this.character.hat,
+      fire: this.character.fire ? "1" : "0",
+    });
 
     const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
     this.shareLink.value = url;
@@ -55,11 +103,10 @@ export class RpgMeApp {
     const link = this.shareLink.value;
 
     if (link) {
-      navigator.clipboard.writeText(link).then(() => {
-        alert("Link copied to clipboard!");
-      }).catch((err) => {
-        console.error("Failed to copy text: ", err);
-      });
+      navigator.clipboard
+        .writeText(link)
+        .then(() => alert("Link copied to clipboard!"))
+        .catch((err) => console.error("Failed to copy text: ", err));
     } else {
       alert("No link to copy! Generate a share link first.");
     }
@@ -67,23 +114,52 @@ export class RpgMeApp {
 
   loadFromURL() {
     const params = new URLSearchParams(window.location.search);
+    const validHats = [
+      "none",
+      "bunny",
+      "coffee",
+      "construction",
+      "cowboy",
+      "education",
+      "knight",
+      "ninja",
+      "party",
+      "pirate",
+      "watermelon",
+    ];
 
     this.seedInput.value = params.get("seed") || "1234567890";
     this.accessoriesInput.value = params.get("accessories") || "0";
-    this.baseInput.value = params.get("base") || "0";
-    this.hatInput.value = params.get("hat") || "none";
-    this.fireInput.value = params.get("fire") === "true";
+    this.faceInput.value = params.get("face") || "0";
+    this.faceitemInput.value = params.get("faceitem") || "0";
+    this.hairInput.value = params.get("hair") || "0";
+    this.pantsInput.value = params.get("pants") || "0";
+    this.shirtInput.value = params.get("shirt") || "0";
+    this.skinInput.value = params.get("skin") || "0";
+    this.hatcolorInput.value = params.get("hatcolor") || "0";
+
+    const hatFromURL = params.get("hat")?.toLowerCase() || "none";
+    this.hatInput.value = validHats.includes(hatFromURL) ? hatFromURL : "none";
+
+    this.fireInput.checked = params.get("fire") === "1";
 
     this.updateCharacter();
   }
 
   updateURL() {
-    const params = new URLSearchParams();
-    params.set("seed", this.seedInput.value || "1234567890");
-    params.set("accessories", this.accessoriesInput.value || "0");
-    params.set("base", this.baseInput.value || "0");
-    params.set("hat", this.hatInput.value || "none");
-    params.set("fire", this.fireInput.value === "true");
+    const params = new URLSearchParams({
+      seed: this.character.seed,
+      accessories: this.character.accessories,
+      face: this.character.face,
+      faceitem: this.character.faceitem,
+      hair: this.character.hair,
+      pants: this.character.pants,
+      shirt: this.character.shirt,
+      skin: this.character.skin,
+      hatcolor: this.character.hatcolor,
+      hat: this.character.hat,
+      fire: this.character.fire ? "1" : "0",
+    });
 
     const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
     window.history.replaceState(null, "", url);
